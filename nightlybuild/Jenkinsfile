@@ -1,0 +1,125 @@
+pipeline {
+    agent any
+    options {
+        timeout(time: 60, unit: 'MINUTES')
+        buildDiscarder(logRotator(numToKeepStr: '3'))
+        disableConcurrentBuilds()
+    }
+
+    triggers { 
+        cron('H(30-35) 02 * * 1-5') 
+    }    
+    stages {
+        stage('Checkout'){
+            parallel {
+                stage('Checkout-Internal') {
+                    steps{
+                        echo 'Removing original source code for internal - /opt/devops/nightly/tomcat'
+                        sh 'rm -rf /opt/devops/nightly/tomcat'
+                        ws('/opt/devops/nightly/tomcat'){
+                            echo "Workspace dir is ${pwd()}"
+                            checkout([$class: 'GitSCM', branches: [[name: 'develop']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CleanBeforeCheckout'], [$class: 'PruneStaleBranch'], [$class: 'RelativeTargetDirectory', relativeTargetDir: 'csis3']], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'Jenkins', url: 'https://github.com/apache/tomcat.git']]])
+                            
+                            notifyBitbucketServer('INPROGRESS') 
+                        }
+                    }
+                }
+                //stage('Checkout-External') {
+                //    steps{
+                //        echo 'Removing original source code for external - /opt/devops/nightly/tomcat'
+                //        sh 'rm -rf /opt/devops/nightly/tomcat'
+                //        ws('/opt/auto_build/csis3_external/rel1'){
+                //            echo "Workspace dir is ${pwd()}"
+                //            checkout([$class: 'GitSCM', branches: [[name: 'develop']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CleanBeforeCheckout'], [$class: 'PruneStaleBranch'], [$class: 'RelativeTargetDirectory', relativeTargetDir: 'csis3']], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'Jenkins', url: 'https://github.com/apache/tomcat.git']]])
+                            
+                //            notifyBitbucketServer('INPROGRESS') 
+                //        }
+                //    }
+                }
+            }
+        }
+        stage('Build'){
+            parallel {
+                stage('Build-Internal') {
+                    steps{
+                        sh '/opt/auto_build/csis3_internal/rel1/workspace/buildApplication.sh'
+                        echo 'Hello I am done'
+                    }
+                }
+                //stage('Build-External') {
+                //    steps{
+                //        sh '/opt/auto_build/csis3_external/rel1/workspace/buildApplication.sh'
+                //        echo 'Hello I am done'
+                //    }
+                //}
+            }
+        }
+        stage('Deploy-SecureQA'){
+            steps{
+                echo 'Deploy to QA Environment'
+                sh '''#!/usr/bin/bash 
+                ssh jenkins@goqa "sudo /opt/deployment/deployApplication.sh qa /artificates/tomcatExample.war"
+                '''
+            }
+        }                               
+        stage('Deploy-UAT'){
+            steps{
+                echo 'Deploy to UAT Environment'
+                sh '''#!/usr/bin/bash 
+                ssh jenkins@gouat "sudo /opt/deployment/deployApplication.sh uat /artificates/tomcatExample.war"
+                '''
+            }
+        }
+        stage('Sonar') {
+            steps{
+                ws('/opt/devops/nightly/tomcat'){
+                    sh '''#!/usr/bin/bash
+                        export SONAR_SCANNER_OPTS="-Djavax.net.ssl.trustStore=/var/lib/sonar-scanner/jre/lib/security/cacerts -Djavax.net.ssl.keyStore=/var/lib/sonar-scanner/jre/lib/security/cacerts"
+                        /var/lib/sonar-scanner/bin/sonar-scanner \
+                            -X -Djavax.net.debug="ssl,handshake" \
+                            -Dsonar.projectKey=tomcat_example \
+                            -Dsonar.projectBaseDir=./ \
+                            -Dsonar.verbose=true\
+                            -Dhttp.nonProxyHosts="*.goweekend.ca" \
+                            -Dsonar.host.url=https://sonarqube.goweekend.ca/sonar \
+                            -Dsonar.login="faea1363aa4705ebabddcf4a59f7987b1fbe8d06"
+                    '''
+                }
+            }
+        }   
+      
+    }
+    post {
+        success {
+            echo " Build Success"
+            emailext (
+                subject: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                body: '${SCRIPT, template="jenkins-matrix-email-html.template"}',
+                recipientProviders: [[$class: 'CulpritsRecipientProvider'],[$class: 'RequesterRecipientProvider'], [$class: 'DevelopersRecipientProvider']],
+                to:'feijiangnan@hotmail.com ou.yuan@gmail.com',
+                mimeType: 'text/html'
+            )
+            notifyBitbucketServer('SUCCESS') 
+        }
+        failure {
+            echo " Build Failed"
+            emailext (
+                subject: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                body: '${SCRIPT, template="jenkins-matrix-email-html.template"}' ,
+                recipientProviders: [[$class: 'CulpritsRecipientProvider'],[$class: 'RequesterRecipientProvider'], [$class: 'DevelopersRecipientProvider']],
+                to:'feijiangnan@hotmail.com ou.yuan@gmail.com',
+                attachLog: true, 
+                compressLog:false,
+                mimeType: 'text/html'
+            )
+            notifyBitbucketServer('FAILED') 
+        }
+    }    
+}
+
+def notifyBitbucketServer(def state) {
+    if('SUCCESS' == state || 'FAILED' == state) {
+        currentBuild.result = state         // Set result of currentBuild !Important!
+    }
+    notifyBitbucket commitSha1: '', considerUnstableAsSuccess: false, credentialsId: 'Jenkins',    disableInprogressNotification: false, ignoreUnverifiedSSLPeer: true, includeBuildNumberInKey: false, prependParentProjectKey: false, projectKey: '', stashServerBaseUrl: 'https://bitbucket.goweekend.ca'
+}
