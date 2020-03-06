@@ -40,21 +40,21 @@ pipeline {
         }
         stage('Build'){
             parallel {
-                stage('Build-Internal') {
+                stage('Build-weekly') {
                     steps{
-                        sh '/opt/auto_build/csis3_internal/rel1/workspace/buildApplication.sh'
+                        sh '/opt/build/goweekend/rel1/workspace/buildGoweekend.sh'
                         echo 'Hello I am done'
                     }
                 }
-                //stage('Build-External') {
+                //stage('Build-monthly') {
                 //    steps{
-                //        sh '/opt/auto_build/csis3_external/rel1/workspace/buildApplication.sh'
+                //        sh '/opt/build/gomonthend/rel1/workspace/buildGomonthend.sh'
                 //        echo 'Hello I am done'
                 //    }
                 //}
             }
         }
-        stage('Deploy-SecureQA'){
+        stage('Deploy-QA'){
             steps{
                 echo 'Deploy to QA Environment'
                 sh '''#!/usr/bin/bash 
