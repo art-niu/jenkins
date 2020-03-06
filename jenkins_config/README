@@ -1,0 +1,3 @@
+# For RedHat/Oracle Linux
+# JVM parameters/OPTIONS can be added in this file
+/etc/sysconfig/jenkins
