@@ -1,0 +1,102 @@
+{
+  "actor": {
+    "username": "nightlybuild",
+    "displayName": "Build Nightly"
+  },
+  "pullrequest": {
+    "id": "498",
+    "title": "TCE-25 - bug fix:remove contact does not work properly",
+    "link": "https://git.goweekend.ca/projects/WEEKEND/repos/tomcatexample/pull-requests/498",
+    "authorLogin": "Prabodha Gunawardena",
+    "fromRef": {
+      "repository": {
+        "scmId": "git",
+        "project": {
+          "key": "WEEKEND",
+          "name": "GOWEEKEND"
+        },
+        "slug": "tomcatexample",
+        "links": {
+          "self": [
+            {
+              "href": "https://git.goweekend.ca/projects/WEEKEND/repos/tomcatexample/browse"
+            }
+          ]
+        },
+        "ownerName": "WEEKEND",
+        "fullName": "WEEKEND/tomcatexample",
+        "public": false,
+        "owner": {
+          "username": "WEEKEND",
+          "displayName": "WEEKEND"
+        }
+      },
+      "branch": {
+        "name": "feature/TCE-25",
+        "rawNode": "e744865ebe8bd1968307a55058eab18630d90ba4"
+      },
+      "commit": {
+        "message": null,
+        "date": null,
+        "hash": "e744865ebe8bd1968307a55058eab18630d90ba4",
+        "authorTimestamp": 0
+      }
+    },
+    "toRef": {
+      "repository": {
+        "scmId": "git",
+        "project": {
+          "key": "WEEKEND",
+          "name": "GOWEEKEND"
+        },
+        "slug": "tomcatexample",
+        "links": {
+          "self": [
+            {
+              "href": "https://git.goweekend.ca/projects/WEEKEND/repos/tomcatexample/browse"
+            }
+          ]
+        },
+        "ownerName": "WEEKEND",
+        "fullName": "WEEKEND/tomcatexample",
+        "public": false,
+        "owner": {
+          "username": "WEEKEND",
+          "displayName": "WEEKEND"
+        }
+      },
+      "branch": {
+        "name": "develop",
+        "rawNode": "f71aea25295177558c93c4858d6ceed354440284"
+      },
+      "commit": {
+        "message": null,
+        "date": null,
+        "hash": "f71aea25295177558c93c4858d6ceed354440284",
+        "authorTimestamp": 0
+      }
+    }
+  },
+  "repository": {
+    "scmId": "git",
+    "project": {
+      "key": "WEEKEND",
+      "name": "GOWEEKEND"
+    },
+    "slug": "tomcatexample",
+    "links": {
+      "self": [
+        {
+          "href": "https://git.goweekend.ca/projects/WEEKEND/repos/tomcatexample/browse"
+        }
+      ]
+    },
+    "ownerName": "WEEKEND",
+    "fullName": "WEEKEND/tomcatexample",
+    "public": false,
+    "owner": {
+      "username": "WEEKEND",
+      "displayName": "WEEKEND"
+    }
+  }
+}

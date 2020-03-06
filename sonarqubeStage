@@ -1,0 +1,17 @@
+  stage('Sonar') {
+            steps{
+                ws('/opt/build/goweekend/tomcat/masterexample'){
+                    sh '''#!/usr/bin/bash
+                        export SONAR_SCANNER_OPTS="-Djavax.net.ssl.trustStore=/var/lib/sonar-scanner/jre/lib/security/cacerts -Djavax.net.ssl.keyStore=/var/lib/sonar-scanner/jre/lib/security/cacerts"
+                        /var/lib/sonar-scanner/bin/sonar-scanner \
+                            -X -Djavax.net.debug="ssl,handshake" \
+                            -Dsonar.projectKey=cseobgt \
+                            -Dsonar.projectBaseDir=./ \
+                            -Dsonar.verbose=true\
+                            -Dhttp.nonProxyHosts="*.csd.toronto.ca" \
+                            -Dsonar.host.url=https://sonarqube.goweekend.ca/sonar \
+                            -Dsonar.login="faea1363aa4705ebabddcf4a59f7987b1fbe8d06"
+                    '''
+                }
+            }
+        }  
