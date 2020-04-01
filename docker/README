@@ -24,16 +24,26 @@ Open brower and type in the url like: http://<your ip>:8080
 Input the credential defined in Dockerfile.
 
 
-Recycle Container and Image
-1. Stop Container
-$ docker container stop <container id>
+Publish Jenkins Image to https://hub.docker.com/
 
-2. Destroy Container
-$ docker container rm <container id>
+First you must have Docker Hub Account, please create one if you don't have.
+Create a repository for new docker image if you don't have one.
 
-3. Destroy Image
-$ docker image rm <container id>
+1. Login to Docker Hub
+$ docker login --username <user name>
 
+2. Verify the Jenkins Docker Image
+$ docker image ls
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+<docker user name>/jenkins   1.0                 d7f91d45f3f1        51 minutes ago      702MB
+jenkins-ant         latest              d7f91d45f3f1        51 minutes ago      702MB
+
+3. Publish the Jenkins Docker Image
+$ docker push <docker user id>/jenkins:tagname
+
+4. Verify Docker Repository
+Verify the image in Docker Hub:
+https://hub.docker.com/
 
 Commands you might be interested, but run it with EXTRA CARE, you can not recover the container and image which were destroyed.
 
@@ -45,3 +55,4 @@ $ docker container rm $(docker container ls -aq)
 
 3. Destroy all images
 $ docker image rm $(docker image ls -aq)
+
