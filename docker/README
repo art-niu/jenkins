@@ -1,0 +1,47 @@
+1. Modify Docker
+You can modify images/Dockerfile in case:
+1.1 Change source image
+1.2 Add or remove plugins
+1.3 Change default user name or password
+1.4 Change Jenkins Home folder
+
+2. Create Jenkins Image from Docker File
+You can customize/personize the image name, for exmple jenkins-ant, ant means the compilers will be used.
+The reason to change folder to images is: 2 groovy files need to be copied to the image.
+
+$ cd images 
+$ sudo docker build -t jenkins-ant .
+
+3. Run Jenkins from new image
+
+$ docker run -d -p 8080:8080 jenkins-ant
+
+Verify the images on your machine
+$ docker image ls -la
+
+4. Test Jenkins
+Open brower and type in the url like: http://<your ip>:8080
+Input the credential defined in Dockerfile.
+
+
+Recycle Container and Image
+1. Stop Container
+$ docker container stop <container id>
+
+2. Destroy Container
+$ docker container rm <container id>
+
+3. Destroy Image
+$ docker image rm <container id>
+
+
+Commands you might be interested:
+
+1. Stop all containers
+$ docker container stop $(docker container ls -aq)
+
+2. Destroy all containers
+$ docker container rm $(docker container ls -aq)
+
+3. Destroy all images
+$ docker container rm $(docker container ls -aq)
