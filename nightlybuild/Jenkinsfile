@@ -18,7 +18,7 @@ pipeline {
                         sh 'rm -rf /opt/devops/nightly/tomcat'
                         ws('/opt/devops/nightly/tomcat'){
                             echo "Workspace dir is ${pwd()}"
-                            checkout([$class: 'GitSCM', branches: [[name: 'develop']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CleanBeforeCheckout'], [$class: 'PruneStaleBranch'], [$class: 'RelativeTargetDirectory', relativeTargetDir: 'csis3']], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'Jenkins', url: 'https://github.com/apache/tomcat.git']]])
+                            checkout([$class: 'GitSCM', branches: [[name: 'develop']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CleanBeforeCheckout'], [$class: 'PruneStaleBranch'], [$class: 'RelativeTargetDirectory', relativeTargetDir: 'goweekend']], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'Jenkins', url: 'https://github.com/apache/tomcat.git']]])
                             
                             notifyBitbucketServer('INPROGRESS') 
                         }
@@ -28,9 +28,9 @@ pipeline {
                 //    steps{
                 //        echo 'Removing original source code for external - /opt/devops/nightly/tomcat'
                 //        sh 'rm -rf /opt/devops/nightly/tomcat'
-                //        ws('/opt/auto_build/csis3_external/rel1'){
+                //        ws('/opt/auto_build/goweekend_public'){
                 //            echo "Workspace dir is ${pwd()}"
-                //            checkout([$class: 'GitSCM', branches: [[name: 'develop']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CleanBeforeCheckout'], [$class: 'PruneStaleBranch'], [$class: 'RelativeTargetDirectory', relativeTargetDir: 'csis3']], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'Jenkins', url: 'https://github.com/apache/tomcat.git']]])
+                //            checkout([$class: 'GitSCM', branches: [[name: 'develop']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CleanBeforeCheckout'], [$class: 'PruneStaleBranch'], [$class: 'RelativeTargetDirectory', relativeTargetDir: 'goweekend']], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'Jenkins', url: 'https://github.com/apache/tomcat.git']]])
                             
                 //            notifyBitbucketServer('INPROGRESS') 
                 //        }
