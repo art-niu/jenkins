@@ -17,7 +17,7 @@ pipeline {
             
             causeString: 'Triggered on Pull request $BRANCH_FROM',
             
-            token: 'feature_csis3',
+            token: 'feature_goweekend',
             
             printContributedVariables: true,
             printPostContent: true,
@@ -59,7 +59,7 @@ pipeline {
                 }
                 //stage('Build-External'){
                 //    steps{
-                //        sh '/opt/auto_build/csis3_external/pullrequest/workspace/buildApplication.sh'
+                //        sh '/opt/auto_build/goweekend_public/pullrequest/workspace/buildApplication.sh'
                 //        echo 'Hello I am done'
                 //    }
                 }                
