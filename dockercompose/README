@@ -13,11 +13,12 @@ $sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 2. Launch Jenkins Container with Docker Compose
 
 To customize Jenkins Container, you can modify docker-compose.yml in current folder.
-
 To tailor Jenkins Image, please follow instruction in file: https://github.com/art-niu/jenkins/blob/master/docker/README
+
+Jenkins Web Dashboard is exposed on port 8080. Slave agents may connect master on default 50000 JNLP (Java Web Start) port.
+
 2.1 Start up Jenkins Container
 $ docker-compose up -d
 
 2.2 Stop the Jenkins Container
 $ docker-compose stop
-
