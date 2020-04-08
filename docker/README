@@ -32,7 +32,14 @@ Create a repository for new docker image if you don't have one.
 1. Login to Docker Hub
 $ docker login --username <user name>
 
-2. Verify the Jenkins Docker Image
+2. Verify the Jenkins Docker Image, the image REPOSITORY must be named like <hub-user>/<repo-name> otherwise :
+Re-tag an existing local image:
+
+$ docker tag <existing-image> <hub-user>/<repo-name>[:<tag>]
+
+Commit changes using: 
+$ docker commit <existing-container> <hub-user>/<repo-name>[:<tag>] to commit changes
+$ 
 $ docker image ls
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
 <docker user name>/jenkins   1.0                 d7f91d45f3f1        51 minutes ago      702MB
