@@ -20,7 +20,7 @@ Verify the images on your machine
 $ docker image ls -la
 
 4. Test Jenkins
-Open brower and type in the url like: http://<your ip>:8080
+Open browser and type in the url like: http://<your ip>:8080
 Input the credential defined in Dockerfile.
 
 
