@@ -1,5 +1,10 @@
-import sys
+import os
+import re
 import requests
+import sys
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from threading import Thread
 from datetime import datetime
 from jenkins_analysis_utils import *
