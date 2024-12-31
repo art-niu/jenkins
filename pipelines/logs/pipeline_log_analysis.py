@@ -7,7 +7,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from threading import Thread
 from datetime import datetime
-from jenkins_analysis_utils import *
+from pipeline_log_analysis_utils import *
 
 # Ensure proper arguments are provided
 if len(sys.argv) < 4:
