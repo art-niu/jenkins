@@ -97,3 +97,6 @@ email_body += f"""
 
 # Send email
 send_email(recipients, findings, url, email_body)
+
+# Print results to console
+print_to_console()
