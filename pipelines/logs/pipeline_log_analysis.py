@@ -7,7 +7,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from threading import Thread
 from datetime import datetime
-from pipeline_log_analysis_utils import *
+from pipeline_log_analysis_helper import *
 
 # Ensure proper arguments are provided
 if len(sys.argv) < 4:
@@ -15,17 +15,17 @@ if len(sys.argv) < 4:
     exit(1)
 
 # Parameters
-url = sys.argv[1]
-if url.endswith("/console"):
-    url += "Text"
+log_url = sys.argv[1]
+if log_url.endswith("/console"):
+    log_url += "Text"
 
 analyzer_name = sys.argv[2]
-recipients = sys.argv[3].split(",")
+recipients = sys.argv[3]
 
 # Fetch log file
 username = "jenkins"
 password = "YourJenkinsToken"
-response = requests.get(url, auth=(username, password), verify=False)
+response = requests.get(log_url, auth=(username, password), verify=False)
 
 if response.status_code != 200:
     print(f"Failed to fetch the log file. HTTP Status Code: {response.status_code}")
@@ -38,7 +38,7 @@ findings = []
 tasks = [
     Thread(target=check_file_not_found, args=(log_lines, findings)),
     Thread(target=check_permission_denied, args=(log_lines, findings)),
-    Thread(target=check_api_test_failures, args=(log_lines, findings, url))
+    Thread(target=check_api_test_failures, args=(log_lines, findings, log_url))
 ]
 
 for task in tasks:
@@ -51,7 +51,7 @@ for task in tasks:
 findings.sort(key=lambda x: x[0])
 
 # Print to console
-print_to_console(url, findings)
+print_to_console(log_url, findings)
 
 # Generate email body
 timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -66,7 +66,7 @@ email_body = f"""
 </head>
 <body>
     <h2>Jenkins Pipeline Log Analysis</h2>
-    <p><b>Jenkins Pipeline Log:</b> <a href="{url}">{url.replace('Text', '')}</a></p>
+    <p><b>Jenkins Pipeline Log:</b> <a href="{log_url}">{log_url.replace('Text', '')}</a></p>
     <h3>Analyzing Results</h3>
     <table>
         <tr>
@@ -96,4 +96,4 @@ email_body += f"""
 """
 
 # Send email
-send_email(recipients, findings, url, email_body)
+send_email(recipients, email_body)
